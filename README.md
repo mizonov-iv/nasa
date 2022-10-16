@@ -4,8 +4,8 @@
 
 How to run a code:
 
-npm i
+- npm i
 
-ng serve
+- ng serve
 
-open http://localhost:4200/
+- open http://localhost:4200/
