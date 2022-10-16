@@ -1,0 +1,64 @@
+<app-navbar></app-navbar>
+<app-slider></app-slider>
+
+<div class="mt-4 p-2">
+  <p class="h5 text-center text-muted">Below you can discover images gathered by NASA's Curiosity, Opportunity, and Spirit rovers on Mars.</p>
+  <p class="h5 text-center text-muted">Please chose a name of Rover, type of Camera and Sol (Martian rotation or day)</p>
+</div>
+
+<div class="container col-10 col-md-6 mt-2 mb-5 mx-auto">
+  <div>
+    <mat-form-field appearance="fill" class="col-10 col-sm-8 col-md-4">
+      <mat-label>Select a Rover</mat-label>
+      <mat-select [(value)]="selectedRover" class="col-10">
+        <mat-option>None</mat-option>
+        <mat-option
+          value="{{rover.name}}"
+          *ngFor="let rover of rovers"
+          (click)="setCameraOptions()"
+        >
+          {{rover.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill"  class="col-10 col-sm-8 col-md-4">
+      <mat-label>Select a Camera</mat-label>
+      <mat-select>
+        <mat-option
+          *ngFor="let camera of roversCameras"
+          [value]="camera.name"
+          (click)="getCamera(camera)"
+        >
+          {{camera.name}}
+        </mat-option>
+        <mat-option *ngIf="!selectedRover">Select a Rover</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-10 col-sm-8 col-md-4">
+      <mat-label>Enter a Sol</mat-label>
+      <input matInput placeholder="Enter a number" [value]="selectedSol">
+    </mat-form-field>
+
+    <button mat-stroked-button (click)="getPhotos()" class="d-block mx-auto">Поиск</button>
+  </div>
+
+  <div *ngIf="!fetchPhotos; else noPhotosFetched" class="mt-5">
+    <div *ngFor="let item of photos | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+      <mat-card>
+        <img style="max-width: 80%" mat-card-image src="{{item.img_src}}" alt="img" class="d-block mx-auto">
+      </mat-card>
+    </div>
+  </div>
+
+  <ng-template #noPhotosFetched>
+    <p>No photos found...</p>
+  </ng-template>
+
+  <div *ngIf="totalPhotos > 25">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+</div>
+
+<app-footer></app-footer>
